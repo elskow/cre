@@ -1,0 +1,13 @@
+2024-06-03T00:34:15.456789Z slurmctld[1234]: warning: Memory usage: 856MB/1024MB (83.6%)
+2024-06-03T00:34:20.567890Z slurmctld[1234]: error: Memory usage: 923MB/1024MB (90.1%) - CRITICAL THRESHOLD EXCEEDED
+2024-06-03T00:34:25.678901Z slurmctld[1234]: error: Memory usage: 967MB/1024MB (94.4%) - MEMORY EXHAUSTION IMMINENT
+2024-06-03T00:34:30.789012Z slurmctld[1234]: fatal: malloc failed: Cannot allocate memory
+2024-06-03T00:34:30.890123Z slurmctld[1234]: fatal: out of memory while processing job queue
+2024-06-03T00:34:32.012345Z slurmctld[1234]: error: Database connection lost: out of memory
+2024-06-03T00:34:34.234567Z slurmctld[1234]: fatal: slurmctld: out of memory, cannot continue
+2024-06-03T00:34:35.345678Z slurmctld[1234]: error: Job submission failed: Unable to contact slurm controller (connect failure)
+2024-06-03T00:34:37.567890Z slurmctld[1234]: fatal: Cannot allocate memory for node state updates
+2024-06-03T00:34:50.678901Z sbatch[3456]: error: Batch job submission failed: Unable to contact slurm controller (connect failure)
+2024-06-03T00:34:51.789012Z squeue[3457]: error: slurm_load_jobs error: Unable to contact slurm controller (connect failure)
+2024-06-03T00:34:52.890123Z sinfo[3458]: error: slurm_load_partitions: Unable to contact slurm controller (connect failure)
+2024-06-03T00:34:53.901234Z scancel[3459]: error: Unable to contact slurm controller (connect failure)

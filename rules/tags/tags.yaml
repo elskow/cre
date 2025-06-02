@@ -489,3 +489,18 @@ tags:
   - name: cascading-failure
     displayName: Cascading Failure
     description: Problems related to cascading failures, where one failure leads to multiple dependent failures
+  - name: slurm
+    displayName: Slurm
+    description: Problems related to Slurm, such as job scheduling failures, controller issues, or resource allocation problems
+  - name: hpc
+    displayName: HPC
+    description: Problems related to high-performance computing (HPC) systems, such as job scheduling, resource allocation, or performance issues
+  - name: out-of-memory
+    displayName: Out of Memory
+    description: Problems related to out-of-memory conditions, such as memory exhaustion or allocation failures
+  - name: job-submission-failure
+    displayName: Job Submission Failure
+    description: Problems related to job submission failures, such as inability to submit jobs or job scheduling issues
+  - name: cluster-failure
+    displayName: Cluster Failure
+    description: Problems related to cluster failures, such as complete cluster unavailability or critical failures affecting multiple nodes

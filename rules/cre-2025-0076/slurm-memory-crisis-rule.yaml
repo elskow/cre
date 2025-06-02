@@ -1,0 +1,93 @@
+---
+rules:
+  - cre:
+      id: CRE-2025-0076
+      severity: 0
+      title: Slurm Controller Memory Exhaustion Crisis
+      category: hpc-memory-problem
+      author: Prequel
+      description: |
+        Critical Slurm controller memory exhaustion detected: The slurmctld daemon has reached
+        memory limits and is failing to process job submissions, node communications, and database
+        operations. This pattern indicates a cascading failure that can affect thousands of jobs
+        and render the entire HPC cluster unusable.
+
+        The detection sequence identifies:
+        1. Progressive memory usage warnings as slurmctld approaches limits
+        2. Critical memory threshold exceeded (>90% usage)
+        3. Memory allocation failures (malloc failures)
+        4. Controller becoming unresponsive to job submissions and node communications
+        5. Database connection failures due to memory exhaustion
+
+        This creates immediate cluster-wide impact affecting all users and running jobs.
+      cause: |
+        - Insufficient memory allocation for slurmctld daemon
+        - Large job arrays causing memory spikes in job state tracking
+        - Memory leaks in job tracking data structures
+        - Database connection pool exhaustion
+        - Rapid job submission/cancellation cycles
+        - CVE-2023-49937: Double free vulnerability in job array handling
+        - Inadequate garbage collection of completed job data
+        - High-frequency job operations overwhelming controller memory
+      impact: |
+        - CRITICAL: Complete cluster unavailability
+        - All new job submissions rejected with "Unable to contact slurm controller"
+        - Running jobs may fail to complete properly
+        - Node state updates lost, causing scheduling inconsistencies
+        - Database operations timeout, risking data corruption
+        - Potential loss of thousands of queued jobs
+        - Cluster restart required with possible job state loss
+        - Multi-user HPC environment completely disrupted
+      impactScore: 10
+      tags:
+        - slurm
+        - hpc
+        - memory
+        - out-of-memory
+        - job-submission-failure
+        - cluster-failure
+      mitigation: |
+        IMMEDIATE ACTIONS:
+        - Check slurmctld memory usage: `ps aux | grep slurmctld`
+        - Monitor cluster status: `sinfo` and `squeue`
+        - Check controller logs: `journalctl -u slurmctld -f`
+        - Verify database connectivity: `sacctmgr list cluster`
+
+        EMERGENCY FIXES:
+        1. Increase memory limits for slurmctld process/container
+        2. Restart slurmctld service: `systemctl restart slurmctld`
+        3. Clear job history if safe: `sacctmgr delete job where submit<date`
+        4. Reduce job array sizes and submission frequency
+        5. Apply CVE-2023-49937 patches if available
+
+        LONG-TERM SOLUTIONS:
+        - Implement proper memory monitoring and alerting
+        - Configure appropriate memory limits in slurm.conf
+        - Set up job history cleanup automation
+        - Monitor and limit large job array submissions
+        - Implement controller high availability setup
+        - Regular memory usage trend analysis
+      mitigationScore: 6
+      references:
+        - https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-49937
+        - https://slurm.schedmd.com/troubleshoot.html
+        - https://slurm.schedmd.com/slurm.conf.html#SECTION_MEMORY
+        - https://slurm.schedmd.com/accounting.html#SECTION_PURGE
+        - https://bugs.schedmd.com/show_bug.cgi?id=18778
+      applications:
+        - name: "slurm"
+          version: ">=20.02.0"
+        - name: "slurmctld"
+          version: ">=20.02.0"
+    metadata:
+      kind: prequel
+      id: ZyucKrtMqvRzF3BQKw5GWr
+    rule:
+      sequence:
+        window: 300s
+        event:
+          source: cre.log.slurm
+        order:
+          - regex: "Memory usage.*[8-9][0-9]\\.[0-9]%|CRITICAL THRESHOLD EXCEEDED"
+          - regex: "malloc failed.*Cannot allocate memory|out of memory|memory exhausted"
+          - regex: "Unable to contact slurm controller|Database connection lost|slurmctld.*cannot continue"

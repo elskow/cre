@@ -129,3 +129,6 @@ categories:
   - name: kubernetes-storage-problems
     displayName: Kubernetes Storage Problems
     description: Problems related to container storage in Kubernetes
+  - name: hpc-memory-problem
+    displayName: HPC Memory Problems
+    description: Problems related to memory issues in High-Performance Computing (HPC) environments
